@@ -25,7 +25,7 @@ class Syndication_WP_REST_Client implements Syndication_Client {
 	public static function get_client_data() {
 		return array( 'id' => 'WP_REST', 'modes' => array( 'push' ), 'name' => 'WordPress.com REST' );
 	}
-	
+
 	public function new_post( $post_ID ) {
 
 		$post = (array)get_post( $post_ID );
@@ -34,7 +34,7 @@ class Syndication_WP_REST_Client implements Syndication_Client {
 		$post = apply_filters( 'syn_rest_push_filter_new_post', $post, $post_ID );
 		if ( false === $post )
 			return true;
-		
+
 		$response = wp_remote_post( 'https://public-api.wordpress.com/rest/v1/sites/' . $this->blog_ID . '/posts/new/', array(
 			'timeout'	   => $this->timeout,
 			'user-agent'	=> $this->useragent,
@@ -77,7 +77,7 @@ class Syndication_WP_REST_Client implements Syndication_Client {
 		$post = apply_filters( 'syn_rest_push_filter_edit_post', $post, $post_ID );
 		if ( false === $post )
 			return true;
-		
+
 		$response = wp_remote_post( 'https://public-api.wordpress.com/rest/v1/sites/' . $this->blog_ID . '/posts/' . $ext_ID . '/', array(
 			'timeout'	   => $this->timeout,
 			'user-agent'	=> $this->useragent,

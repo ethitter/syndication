@@ -153,7 +153,7 @@ class Syndication_WP_RSS_Client extends SimplePie implements Syndication_Client 
 
         <?php
 
-        do_action( 'syn_after_site_form', $site ); 
+        do_action( 'syn_after_site_form', $site );
     }
 
     public static function save_settings( $site_ID ) {
@@ -209,7 +209,7 @@ class Syndication_WP_RSS_Client extends SimplePie implements Syndication_Client 
         return $posts;
 
     }
-    
+
     public function set_taxonomy( $item ) {
         $cats = $item->get_categories();
         $ids = array(
@@ -226,7 +226,7 @@ class Syndication_WP_RSS_Client extends SimplePie implements Syndication_Client 
             } elseif ( $result = get_term_by( 'name', $cat->term, 'post_tag' ) ) {
                 if ( isset( $result->term_id ) ) {
                     $ids['tags'][] = $result->term_id;
-                }                    
+                }
             } else {
                 // creates if not
                 $result = wp_insert_term( $cat->term, 'category' );
@@ -239,7 +239,7 @@ class Syndication_WP_RSS_Client extends SimplePie implements Syndication_Client 
         // returns array ready for post creation
         return $ids;
     }
-    
+
     public static function save_meta( $result, $post, $site, $transport_type, $client ) {
         if ( ! $result || is_wp_error( $result ) || ! isset( $post['postmeta'] ) ) {
             return false;
@@ -247,7 +247,7 @@ class Syndication_WP_RSS_Client extends SimplePie implements Syndication_Client 
         $categories = $post['post_category'];
         wp_set_post_terms($result, $categories, 'category', true);
         $metas = $post['postmeta'];
-            
+
         //handle enclosures separately first
         $enc_field = isset( $metas['enc_field'] ) ? $metas['enc_field'] : null;
         $enclosures = isset( $metas['enclosures'] ) ? $metas['enclosures'] : null;
@@ -260,16 +260,16 @@ class Syndication_WP_RSS_Client extends SimplePie implements Syndication_Client 
                 }
                 add_post_meta($result, $enc_field, $enclosure, false);
             }
-    
+
             // now remove them from the rest of the metadata before saving the rest
             unset($metas['enclosures']);
         }
-            
+
         foreach ($metas as $meta_key => $meta_value) {
             add_post_meta($result, $meta_key, $meta_value, true);
         }
     }
-    
+
     public static function update_meta( $result, $post, $site, $transport_type, $client ) {
         if ( ! $result || is_wp_error( $result ) || ! isset( $post['postmeta'] ) ) {
             return false;
@@ -277,7 +277,7 @@ class Syndication_WP_RSS_Client extends SimplePie implements Syndication_Client 
         $categories = $post['post_category'];
         wp_set_post_terms($result, $categories, 'category', true);
         $metas = $post['postmeta'];
-            
+
         // handle enclosures separately first
         $enc_field = isset( $metas['enc_field'] ) ? $metas['enc_field'] : null;
         $enclosures = isset( $metas['enclosures'] ) ? $metas['enclosures'] : null;
@@ -290,17 +290,17 @@ class Syndication_WP_RSS_Client extends SimplePie implements Syndication_Client 
                 }
                 add_post_meta($result, $enc_field, $enclosure, false);
             }
-    
+
             // now remove them from the rest of the metadata before saving the rest
             unset($metas['enclosures']);
         }
-            
+
         foreach ($metas as $meta_key => $meta_value) {
             update_post_meta($result, $meta_key, $meta_value);
         }
     }
-    
-    public static function save_tax( $result, $post, $site, $transport_type, $client ) { 
+
+    public static function save_tax( $result, $post, $site, $transport_type, $client ) {
         if ( ! $result || is_wp_error( $result ) || ! isset( $post['tax'] ) ) {
             return false;
         }
@@ -313,7 +313,7 @@ class Syndication_WP_RSS_Client extends SimplePie implements Syndication_Client 
             wp_set_object_terms($result, (string)$tax_value, $tax_name, true);
         }
     }
-    
+
     public static function update_tax( $result, $post, $site, $transport_type, $client ) {
         if ( ! $result || is_wp_error( $result ) || ! isset( $post['tax'] ) ) {
             return false;
@@ -328,7 +328,7 @@ class Syndication_WP_RSS_Client extends SimplePie implements Syndication_Client 
             if ( !in_array($tax_name, $replace_tax_list ) ) {
                 //if we haven't processed this taxonomy before, replace any terms on the post with the first new one
                 wp_set_object_terms($result, (string)$tax_value, $tax_name );
-                $replace_tax_list[] = $tax_name; 
+                $replace_tax_list[] = $tax_name;
             } else {
                 //if we've already added one term for this taxonomy, append any others
                 wp_set_object_terms($result, (string)$tax_value, $tax_name, true);
